@@ -1,32 +1,36 @@
-import React, { Component } from 'react';
-import './App.css';
-import axios from 'axios';
+import React, { Component } from "react";
+import "./App.css";
+import axios from "axios";
 
-
-const BASE_URL = 'HTTPS://swapi.co/api/';
-const PEOPLE_URL =`${BASE_URL}people`;
-
+const BASE_URL = "HTTPS://swapi.co/api/";
+const PEOPLE_URL = `${BASE_URL}people`;
 
 class App extends Component {
-  constructor(){
+  constructor() {
     super();
-    this.state={
-      people: []
-    }
+    this.state = {
+      people: [],
+      loading: true
+    };
   }
-  componentDidMount(){
-    console.log('component did mount');
-    axios.get(PEOPLE_URL)
-  .then((response) => this.setState({people: response.data.results}))
-  .catch((error) => console.log(error));
+  componentDidMount() {
+    console.log("component did mount");
+    axios
+      .get(PEOPLE_URL)
+      .then(response => this.setState({ loading: false,  people: response.data.results }))
+      .catch(error => console.log(error));
   }
   render() {
+    if(this.state.loading){
+      return<h1>Loading.....</h1>
+    }
+    const people = this.state.people.map(person => <li>{person.name}</li>);
     return (
-      <pre>
-        {JSON.stringify(this.state.people, null, 4)}
-      </pre>
+      <ul>
+      {people}
+      </ul>
     );
-  }
-}
+  }}
+
 
 export default App;
